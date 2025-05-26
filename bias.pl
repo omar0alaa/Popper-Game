@@ -25,7 +25,7 @@ color(orange).
 color(red).
 color(magenta).
 
-% Example format 
+% Example format
 :- begin_in.
 valid_move(BlockID, X, Y) :-
     valid_coord(X, Y),

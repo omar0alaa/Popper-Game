@@ -93,7 +93,7 @@ init_blocks(Size) :-
 display_game_state :-
     nl,
     write('Current Grid:'), nl,
-    display_grid,                     % Show the grid
+    display_game_grid,                     % Show the grid
     nl,
     write('Blocks Outside Grid:'), nl,
     display_blocks,                   % Show available blocks
@@ -104,7 +104,7 @@ display_game_state :-
 
 % Display the grid
 % Shows the current state of the grid with colors
-display_grid :-
+display_game_grid :-
     grid_size(Size),
     Max is Size - 1,
     % Display each row
@@ -155,9 +155,9 @@ place_block(BlockID, X, Y) :-
     update_score,                    % Update score
     display_game_state,              % Show new state
     % Check for game over
-    (game_over -> 
+    (check_game_over -> 
         announce_game_over,
-        generate_game_results
+        generate_results
     ;
         true
     ).
@@ -173,12 +173,14 @@ update_score :-
 % Game ends when:
 % 1. No more blocks to place, or
 % 2. No valid moves left
-game_over :-
+check_game_over :-
     \+ block(_, _).  % No more blocks to place
-game_over :-
-    \+ (block(_, Color),
+check_game_over :-
+    block(_, _),  % There are blocks left
+    \+ (block(BlockID, Color),
         cell(X, Y, Color),
-        \+ cell_occupied(X, Y)).  % No valid moves left
+        \+ cell_occupied(X, Y),
+        valid_move(BlockID, X, Y)).  % But no valid moves
 
 % Announce game over
 % Shows final score and generates results
@@ -198,14 +200,15 @@ announce_game_over :-
 play :-
     write('Welcome to Color Matching Game!'), nl,
     init_game,
+    \+ check_game_over,  % Make sure game isn't over after initialization
     game_loop.
 
 % Game interaction loop
 % Handles player moves until game over
 game_loop :-
-    (game_over ->
+    (check_game_over ->
         announce_game_over,
-        generate_game_results
+        generate_results
     ;
         write('Enter your move:'), nl,
         % Get move details from player
@@ -227,12 +230,12 @@ game_loop :-
         )
     ).
 
-% Predicate to validate moves (this will be learned by Popper)
-% Checks if a move is valid based on color matching and adjacency
-valid_move(X1, Y1, X2, Y2) :-
-    cell(X1, Y1, Color),
-    cell(X2, Y2, Color),
-    adjacent(cell(X1,Y1), cell(X2,Y2)).
+% Predicate to validate moves
+% Checks if a move is valid based on color matching
+valid_move(BlockID, X, Y) :-
+    block(BlockID, Color),
+    cell(X, Y, Color),
+    \+ cell_occupied(X, Y).
 
 % Helper predicates for testing
 % Creates a test grid with predefined colors
