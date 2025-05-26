@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Color Matching Game Results</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 20px; background-color: #f5f5f5; }
+.grid-container { display: grid; gap: 10px; margin: 20px auto; width: fit-content; }
+.cell { width: 60px; height: 60px; border: 2px solid #ddd; border-radius: 5px; display: flex; align-items: center; justify-content: center; }
+.block { width: 50px; height: 50px; border-radius: 5px; margin: 5px; }
+.yellow { background-color: #ffffcc; }
+.blue { background-color: #ccccff; }
+.orange { background-color: #ffddaa; }
+.red { background-color: #ffcccc; }
+.magenta { background-color: #ffccff; }
+.blocks-container { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px auto; width: fit-content; }
+.score { text-align: center; font-size: 1.2em; margin: 20px; }
+</style>
+</head>
+<body>
+<h1>Color Matching Game Results</h1>
+<h2>Current Grid (2x2)</h2>
+<div class="grid-container" style="grid-template-columns: repeat(2, 70px);">
+<div class="cell placed">placed</div>
+<div class="cell placed">placed</div>
+<div class="cell placed">placed</div>
+<div class="cell placed">placed</div>
+</div>
+<h2>Available Blocks</h2>
+<div class="blocks-container">
+</div>
+<div class="score">Current Score: 4</div>
+</body>
+</html>
