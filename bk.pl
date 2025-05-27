@@ -8,6 +8,8 @@
 % Dynamic predicates
 :- dynamic cell/3.  % cell(X, Y, Color)
 :- dynamic block/2. % block(BlockID, Color)
+:- discontiguous color/1.
+:- discontiguous cell/3.
 
 % Basic facts
 color(red).
