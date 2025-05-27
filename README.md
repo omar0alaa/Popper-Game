@@ -58,7 +58,7 @@ Place the following files in your working directory:
 
 1. **Open SWI-Prolog in your project directory:**
    ```
-swipl
+    swipl
    ```
 2. **Load the game:**
    ```prolog
