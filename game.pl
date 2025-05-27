@@ -29,6 +29,7 @@
 % 3. Initializes the grid and blocks
 % 4. Displays the initial game state
 init_game :-
+    write('DEBUG: Starting init_game'), nl,
     % Clear all existing game state
     retractall(cell(_, _, _)),    % Remove all cell facts
     retractall(block(_, _)),      % Remove all block facts
@@ -59,8 +60,11 @@ init_game :-
 % 2. Fills each cell with a random color
 init_grid(Size) :-
     Max is Size - 1,                  % Calculate maximum index
-    findall(Color, color(Color), Colors), % Get list of available colors
+    write('DEBUG: About to get colors list'), nl,
+    findall(Color, (color(Color), write('DEBUG: Found color: '), write(Color), nl), Colors), % Get list of available colors
+    write('DEBUG: Colors list: '), write(Colors), nl,
     length(Colors, NumColors),        % Count available colors
+    write('DEBUG: Number of colors: '), write(NumColors), nl,
     % Fill each cell with a random color
     forall(between(0, Max, Y),        % For each row
            forall(between(0, Max, X),  % For each column
