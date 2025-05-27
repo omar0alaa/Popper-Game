@@ -1,14 +1,30 @@
 % Language bias for Popper to learn color matching game rules
 
-% Mode declarations
-:- modeh(1, valid_move(+block_id, +coord, +coord))?
-:- modeb(1, valid_coord(+coord, +coord))?
-:- modeb(1, cell_has_color(+coord, +coord, #color))?
-:- modeb(1, cell_occupied(+coord, +coord))?
-:- modeb(1, block(+block_id, #color))?
-:- modeb(1, color(#color))?
+% Predicate declarations
+head_pred(valid_move,3).
+body_pred(valid_coord,2).
+body_pred(cell_has_color,3).
+body_pred(cell_occupied,2).
+body_pred(block,2).
+body_pred(color,1).
 
 % Type definitions
+type(valid_move,(block_id,coord,coord)).
+type(valid_coord,(coord,coord)).
+type(cell_has_color,(coord,coord,color)).
+type(cell_occupied,(coord,coord)).
+type(block,(block_id,color)).
+type(color,(color)).
+
+% Direction declarations
+direction(valid_move,(in,in,in)).
+direction(valid_coord,(in,in)).
+direction(cell_has_color,(in,in,in)).
+direction(cell_occupied,(in,in)).
+direction(block,(in,in)).
+direction(color,(in)).
+
+% Constants
 block_id(b1).
 block_id(b2).
 block_id(b3).
@@ -25,29 +41,6 @@ color(orange).
 color(red).
 color(magenta).
 
-% Example format
-:- begin_in.
-valid_move(BlockID, X, Y) :-
-    valid_coord(X, Y),
-    block(BlockID, Color),
-    cell(X, Y, Color),
-    \+ cell_occupied(X, Y).
-:- end_in.
-
-% Positive examples
-:- begin_pos.
-valid_move(b1, 0, 0).  % Place yellow block on yellow cell
-valid_move(b2, 0, 1).  % Place blue block on blue cell
-valid_move(b3, 1, 1).  % Place orange block on orange cell
-valid_move(b4, 1, 2).  % Place red block on red cell
-valid_move(b5, 2, 0).  % Place magenta block on magenta cell
-:- end_pos.
-
-% Negative examples
-:- begin_neg.
-valid_move(b1, 1, 1).  % Try to place yellow block on orange cell
-valid_move(b2, 2, 2).  % Try to place blue block on red cell
-valid_move(b3, 0, 0).  % Try to place orange block on yellow cell
-valid_move(b4, 2, 0).  % Try to place red block on magenta cell
-valid_move(b5, 1, 2).  % Try to place magenta block on red cell
-:- end_neg. 
+% Bias settings
+max_vars(6).
+max_body(6). 
