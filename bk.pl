@@ -10,27 +10,24 @@
 :- dynamic block/2. % block(BlockID, Color)
 
 % Basic facts
-color(yellow).
-color(blue).
-color(orange).
 color(red).
-color(magenta).
+color(blue).
+color(green).
+color(yellow).
 
-% Helper predicates
-valid_coord(X, Y) :-
-    grid_size(Size),
-    Max is Size - 1,
-    X >= 0,
-    X =< Max,
-    Y >= 0,
-    Y =< Max.
+block(b1, red).
+block(b2, blue).
+block(b3, green).
+block(b4, yellow).
 
-cell_occupied(X, Y) :-
-    cell(X, Y, placed).
+cell(0,0,red).
+cell(0,1,blue).
+cell(1,0,green).
+cell(1,1,yellow).
 
-cell_has_color(X, Y, Color) :-
-    cell(X, Y, Color),
-    Color \= placed.
+cell_has_color(X,Y,C) :- cell(X,Y,C).
+cell_occupied(_,_) :- fail. % No cells are occupied in this simple setup
+valid_coord(X,Y) :- member(X,[0,1]), member(Y,[0,1]).
 
 % Game rules
 can_place_block(BlockID, X, Y) :-
@@ -119,3 +116,40 @@ game_over :-  % Game is over when no valid moves are possible
     \+ (block(_, Color),
         cell(X, Y, Color),
         \+ cell_occupied(X, Y)).
+
+% Background knowledge for object-to-cell color matching
+
+% Define available colors
+color(red).
+color(blue).
+color(green).
+color(yellow).
+
+% Define objects and their colors
+object(o1).
+object(o2).
+object(o3).
+object(o4).
+object_color(o1, red).
+object_color(o2, blue).
+object_color(o3, green).
+object_color(o4, yellow).
+
+% Define cells and their colors
+cell(0,0,red).
+cell(0,1,blue).
+cell(1,0,green).
+cell(1,1,yellow).
+
+% Helper: a cell is available if it is not occupied
+cell_available(X,Y,State) :- \+ member(placed(_,X,Y), State).
+
+% Helper: an object is available if it is not placed
+object_available(O,State) :- \+ member(placed(O,_,_), State).
+
+% Valid move: place object O in cell (X,Y) if colors match and both are available
+can_place(O,X,Y,State) :-
+    object_color(O,Color),
+    cell(X,Y,Color),
+    object_available(O,State),
+    cell_available(X,Y,State).
