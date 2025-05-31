@@ -195,7 +195,7 @@ release(state(Pos, blue_obj, RedObjs, BlueObjs, RedGoals, BlueGoals),
     \+ member(Pos, BlueObjs),
     BlueObjsNew = [Pos|BlueObjs].
 
-% Helper: robot can grab if hand is free and object is at robot's position
+% Helper: robot can grab if hand is free and object is at robots position
 can_grab(state(Pos, free, RedObjs, BlueObjs, _, _)) :-
     (member(Pos, RedObjs); member(Pos, BlueObjs)).
 
@@ -235,7 +235,7 @@ grab(State1, State2) :-
     object(Color, X, Y),
     cell(X, Y),
     State2 = [hand(Color), \+ object(Color, X, Y)].
-release(State1, State2) :-
+release(_, State2) :-
     hand(Color),
     cell(X, Y),
     State2 = [hand(free), object(Color, X, Y)].
