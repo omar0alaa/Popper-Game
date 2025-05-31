@@ -199,3 +199,37 @@ can_release(state(_, blue_obj, _, _, _, _)).
 
 % Example initial state:
 % state(cell(0,0), free, [cell(1,1),cell(2,2)], [cell(0,1)], [cell(2,0)], [cell(1,2)])
+
+% Background knowledge for robot manipulation domain
+
+% Dynamic predicates
+:- dynamic cell/2.  % cell(X, Y)
+:- dynamic hand/1.  % hand(Status)
+:- dynamic object/3. % object(Color, X, Y)
+
+% Facts
+cell(0,0).
+cell(0,1).
+cell(0,2).
+cell(1,0).
+cell(1,1).
+cell(1,2).
+cell(2,0).
+cell(2,1).
+cell(2,2).
+
+hand(free).
+
+object(red, 1, 1).
+object(blue, 2, 2).
+
+% Rules for actions
+grab(State1, State2) :-
+    hand(free),
+    object(Color, X, Y),
+    cell(X, Y),
+    State2 = [hand(Color), \+ object(Color, X, Y)].
+release(State1, State2) :-
+    hand(Color),
+    cell(X, Y),
+    State2 = [hand(free), object(Color, X, Y)].

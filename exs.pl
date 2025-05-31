@@ -73,3 +73,21 @@ pos(release(state(cell(2,2), blue_obj, [cell(0,0)], [cell(0,1)], [cell(2,0)], [c
 % Negative examples for release/2
 neg(release(state(cell(1,1), free, [cell(0,0)], [cell(0,1)], [cell(2,0)], [cell(1,2)]), _)). % hand not holding
 neg(release(state(cell(2,2), red_obj, [cell(0,0),cell(2,2)], [cell(0,1)], [cell(2,0)], [cell(1,2)]), _)). % already object at pos
+
+% Examples for robot manipulation domain
+
+% Positive examples for grab
+pos(grab([hand(free), object(red, 1, 1)], [hand(red), \+ object(red, 1, 1)])).
+pos(grab([hand(free), object(blue, 2, 2)], [hand(blue), \+ object(blue, 2, 2)])).
+
+% Negative examples for grab
+neg(grab([hand(red), object(red, 1, 1)], _)).
+neg(grab([hand(free), \+ object(red, 1, 1)], _)).
+
+% Positive examples for release
+pos(release([hand(red)], [hand(free), object(red, 1, 1)])).
+pos(release([hand(blue)], [hand(free), object(blue, 2, 2)])).
+
+% Negative examples for release
+neg(release([hand(free)], _)).
+neg(release([hand(red)], [hand(free), \+ object(red, 1, 1)])).
