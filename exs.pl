@@ -91,3 +91,7 @@ pos(release([hand(blue)], [hand(free), object(blue, 2, 2)])).
 % Negative examples for release
 neg(release([hand(free)], _)).
 neg(release([hand(red)], [hand(free), \+ object(red, 1, 1)])).
+
+% Add discontiguous directives
+:- discontiguous pos/1.
+:- discontiguous neg/1.

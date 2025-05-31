@@ -12,6 +12,9 @@
 :- discontiguous cell/3.
 :- discontiguous neg/1.
 :- discontiguous pos/1.
+:- discontiguous cell/2.
+:- discontiguous grab/2.
+:- discontiguous release/2.
 
 % Basic facts
 color(red).
@@ -32,6 +35,9 @@ cell(1,1,yellow).
 cell_has_color(X,Y,C) :- cell(X,Y,C).
 cell_occupied(_,_) :- fail. % No cells are occupied in this simple setup
 valid_coord(X,Y) :- member(X,[0,1]), member(Y,[0,1]).
+
+% Define grid_size/1 predicate
+grid_size(3). % Example: 3x3 grid
 
 % Game rules
 can_place_block(BlockID, X, Y) :-
