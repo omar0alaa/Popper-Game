@@ -157,3 +157,45 @@ can_place(O,X,Y,State) :-
     cell(X,Y,Color),
     object_available(O,State),
     cell_available(X,Y,State).
+
+% --- Robot manipulation domain (grab/release) ---
+
+% State representation:
+% state(RobotPos, HandStatus, RedObjs, BlueObjs, RedGoals, BlueGoals)
+%   - RobotPos: cell(X,Y)
+%   - HandStatus: free | red_obj | blue_obj
+%   - RedObjs: list of cell(X,Y) where red objects are on the ground
+%   - BlueObjs: list of cell(X,Y) where blue objects are on the ground
+%   - RedGoals: list of cell(X,Y) goal positions for red objects
+%   - BlueGoals: list of cell(X,Y) goal positions for blue objects
+
+% Action: grab
+% grab(StateBefore, StateAfter)
+grab(state(Pos, free, RedObjs, BlueObjs, RedGoals, BlueGoals),
+     state(Pos, red_obj, RedObjsNew, BlueObjs, RedGoals, BlueGoals)) :-
+    select(Pos, RedObjs, RedObjsNew).
+grab(state(Pos, free, RedObjs, BlueObjs, RedGoals, BlueGoals),
+     state(Pos, blue_obj, RedObjs, BlueObjsNew, RedGoals, BlueGoals)) :-
+    select(Pos, BlueObjs, BlueObjsNew).
+
+% Action: release
+% release(StateBefore, StateAfter)
+release(state(Pos, red_obj, RedObjs, BlueObjs, RedGoals, BlueGoals),
+        state(Pos, free, RedObjsNew, BlueObjs, RedGoals, BlueGoals)) :-
+    \+ member(Pos, RedObjs),
+    RedObjsNew = [Pos|RedObjs].
+release(state(Pos, blue_obj, RedObjs, BlueObjs, RedGoals, BlueGoals),
+        state(Pos, free, RedObjs, BlueObjsNew, RedGoals, BlueGoals)) :-
+    \+ member(Pos, BlueObjs),
+    BlueObjsNew = [Pos|BlueObjs].
+
+% Helper: robot can grab if hand is free and object is at robot's position
+can_grab(state(Pos, free, RedObjs, BlueObjs, _, _)) :-
+    (member(Pos, RedObjs); member(Pos, BlueObjs)).
+
+% Helper: robot can release if holding an object
+can_release(state(_, red_obj, _, _, _, _)).
+can_release(state(_, blue_obj, _, _, _, _)).
+
+% Example initial state:
+% state(cell(0,0), free, [cell(1,1),cell(2,2)], [cell(0,1)], [cell(2,0)], [cell(1,2)])
