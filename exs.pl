@@ -53,3 +53,23 @@ neg(valid_place_action(o1,2,2,[])). % out of bounds
 neg(valid_place_action(o2,-1,0,[])). % out of bounds
 neg(valid_place_action(o3,0,-1,[])). % out of bounds
 neg(valid_place_action(o4,2,0,[])). % out of bounds
+
+% Positive examples for grab/2
+pos(grab(state(cell(0,0), free, [cell(0,0),cell(1,1)], [cell(0,1)], [cell(2,0)], [cell(1,2)]),
+         state(cell(0,0), red_obj, [cell(1,1)], [cell(0,1)], [cell(2,0)], [cell(1,2)]))).
+pos(grab(state(cell(0,1), free, [cell(1,1)], [cell(0,1),cell(2,2)], [cell(2,0)], [cell(1,2)]),
+         state(cell(0,1), blue_obj, [cell(1,1)], [cell(2,2)], [cell(2,0)], [cell(1,2)]))).
+
+% Negative examples for grab/2
+neg(grab(state(cell(0,0), red_obj, [cell(0,0),cell(1,1)], [cell(0,1)], [cell(2,0)], [cell(1,2)]), _)). % hand not free
+neg(grab(state(cell(2,2), free, [cell(0,0),cell(1,1)], [cell(0,1)], [cell(2,0)], [cell(1,2)]), _)). % no object at pos
+
+% Positive examples for release/2
+pos(release(state(cell(1,1), red_obj, [cell(0,0)], [cell(0,1)], [cell(2,0)], [cell(1,2)]),
+            state(cell(1,1), free, [cell(1,1),cell(0,0)], [cell(0,1)], [cell(2,0)], [cell(1,2)]))).
+pos(release(state(cell(2,2), blue_obj, [cell(0,0)], [cell(0,1)], [cell(2,0)], [cell(1,2)]),
+            state(cell(2,2), free, [cell(0,0)], [cell(2,2),cell(0,1)], [cell(2,0)], [cell(1,2)]))).
+
+% Negative examples for release/2
+neg(release(state(cell(1,1), free, [cell(0,0)], [cell(0,1)], [cell(2,0)], [cell(1,2)]), _)). % hand not holding
+neg(release(state(cell(2,2), red_obj, [cell(0,0),cell(2,2)], [cell(0,1)], [cell(2,0)], [cell(1,2)]), _)). % already object at pos
